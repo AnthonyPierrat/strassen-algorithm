@@ -70,7 +70,7 @@ export default class Algo {
                 for (let i = 0; i < rowsToAdd; i++) array.push(0);
             })
         }
-        console.log(matrix);
+        console.log('power', matrix.matrix);
     }
 
     reshape(matrix) {
@@ -78,9 +78,10 @@ export default class Algo {
         // slice from orignal columns number
         // slice from orignal rows number
         // return
-        // console.log(matrix.matrix.length - matrix.matrix.columns);
-        console.log(matrix.matrix.length, (matrix.matrix.length - matrix.matrix.columns));
-        matrix.matrix.splice(matrix.matrix.length, matrix.matrix.length - matrix.matrix.columns);
-        console.log(matrix.matrix);
+        matrix.matrix.splice(matrix.columns, (matrix.matrix.length - matrix.columns));
+        matrix.matrix.forEach(array => {
+            array.splice(matrix.rows, array.length - matrix.rows);
+        })
+        console.log('reshape', matrix.matrix);
     }
 } 

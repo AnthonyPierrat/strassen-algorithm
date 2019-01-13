@@ -19,13 +19,13 @@ export default {
   created: function() {
     const m = new Matrix(4, 4, true);
     const s = new Matrix(4, 4, true);
-    const l = new Matrix(2, 4, true);
+    const l = new Matrix(4, 2, true);
     const math = new Algo();
     console.log(m.matrix, s.matrix);
     const result = math.add(m, s);
     const result2 = math.substract(m, s);
-    console.log(math.fillPowerOfTwo(l));
-    console.log(math.reshape(l));
+    // math.fillPowerOfTwo(l);
+    // math.reshape(l);
   }
 };
 </script>
