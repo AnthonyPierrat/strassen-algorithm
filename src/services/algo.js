@@ -119,4 +119,55 @@ export default class Algo {
         })
         console.log('reshape', matrix.matrix);
     }
+
+    /**
+     * Split a matrix
+     * @param {Matrix} matrix 
+     * @param {number} indexColumnStart 
+     * @param {number} indexColumnEnd 
+     * @param {number} indexRowStart 
+     * @param {number} indexRowEnd
+     * @returns
+     *  A multidimensional array
+     */
+    split(matrix, indexColumnStart, indexColumnEnd, indexRowStart, indexRowEnd) {
+        const splitted = matrix.matrix.slice(indexColumnStart, indexColumnEnd);
+        let result = [];
+        splitted.forEach(array => {
+            result.push(array.slice(indexRowStart, indexRowEnd));
+        });
+
+        return result;
+    }
+
+    divideByBlock(a, b) {
+
+        // top left matrix a
+        const a11 = this.split(a, 0, a.matrix.length / 2, 0, a.matrix[0].length / 2);
+        // top right matrix a
+        const a12 = this.split(a, 0, a.matrix.length / 2, a.matrix.length / 2, a.matrix.length);
+        // bottom left matrix a
+        const a21 = this.split(a, a.matrix.length / 2, a.matrix.length, 0, a.matrix[0].length / 2);
+        // bottom right matrix a
+        const a22 = this.split(a, a.matrix.length / 2, a.matrix.length, a.matrix.length / 2, a.matrix.length);
+
+        console.log('top left', a11);
+        console.log('top right', a12);
+        console.log('bottom left', a21);
+        console.log('bottom right', a22);
+
+        // top left matrix b
+        const b11 = this.split(b, 0, b.matrix.length / 2, 0, b.matrix[0].length / 2);
+        // top right matrix b
+        const b12 = this.split(b, 0, b.matrix.length / 2, b.matrix.length / 2, b.matrix.length);
+        // bottom left matrix b
+        const b21 = this.split(b, b.matrix.length / 2, b.matrix.length, 0, b.matrix[0].length / 2);
+        // bottom right matrix b
+        const b22 = this.split(b, b.matrix.length / 2, b.matrix.length, b.matrix.length / 2, b.matrix.length);
+
+        console.log('top left', b11);
+        console.log('top right', b12);
+        console.log('bottom left', b21);
+        console.log('bottom right', b22);
+    }
 } 
