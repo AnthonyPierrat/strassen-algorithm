@@ -2,8 +2,19 @@ import Matrix from "../models/matrix";
 
 export default class Algo {
 
+    /**
+     * @constructor
+     * Construcs an algo object with all strassen methods
+     */
     constructor() { }
 
+    /**
+     * Matrix addition
+     * @param {Matrix} a 
+     * @param {Matrix} b
+     * @return
+     *  A matrix object
+     */
     add(a, b) {
         const c = new Matrix(a.columns, a.rows, false);
         for (let i = 0; i < a.columns; i++) {
@@ -14,6 +25,13 @@ export default class Algo {
         return c;
     }
 
+    /**
+     * Matrix substraction
+     * @param {Matrix} a 
+     * @param {Matrix} b
+     * @return 
+     *  A matrix object
+     */
     substract(a, b) {
         const c = new Matrix(a.columns, a.rows, false);
         for (let i = 0; i < a.columns; i++) {
@@ -24,11 +42,25 @@ export default class Algo {
         return c;
     }
 
+    /**
+     * Check wether the matrix is power of two
+     * @param {Matrix} matrix
+     * @return
+     *  A boolean 
+     */
     isPowerOfTwo(matrix) {
         const n = matrix.matrix.length * matrix.matrix[0].length;
         return Math.log2(n) % 1 === 0;
     }
 
+    /**
+     * Fill a matrix to a power of two matrix with zeros
+     * Step 1 - check wether the matrix is n*n 
+     * Step 2 - Make it power of two if neccessary
+     * @param {Matrix} matrix
+     * @return
+     *  A matrix object
+     */
     fillPowerOfTwo(matrix) {
 
         // first check if it's n*n
@@ -73,11 +105,14 @@ export default class Algo {
         console.log('power', matrix.matrix);
     }
 
+    /**
+     * Reshape a matrix to it's origin columns and rows (remove zeros)
+     * @param {Matrix} matrix
+     * @return
+     *  A matrix object
+     */
     reshape(matrix) {
-        // todo
-        // slice from orignal columns number
-        // slice from orignal rows number
-        // return
+
         matrix.matrix.splice(matrix.columns, (matrix.matrix.length - matrix.columns));
         matrix.matrix.forEach(array => {
             array.splice(matrix.rows, array.length - matrix.rows);

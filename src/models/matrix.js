@@ -1,5 +1,12 @@
 export default class Matrix {
 
+    /**
+     * Construcs a matrix object
+     * @constructor
+     * @param {number} columns number of columns
+     * @param {number} rows number of rows
+     * @param {boolean} random fill the matrix with zero or random numbers
+     */
     constructor(columns, rows, random) {
         if (!random) {
             this.columns = columns;
@@ -12,6 +19,11 @@ export default class Matrix {
         }
     }
 
+    /**
+     * Fill a matrix object with zeros & create a multidimensional array
+     * @return
+     *  A multidimensional array filled with zeros
+     */
     fill() {
         const m = [];
         for (let i = 0; i < this.columns; i++) {
@@ -23,6 +35,11 @@ export default class Matrix {
         return m;
     }
 
+    /**
+     * Fill a matrix with random numbers
+     * @return
+     *  A multidimensional array with random numbers & create a multidimensional array
+     */
     fillRandom() {
         const m = [];
         for (let i = 0; i < this.columns; i++) {
