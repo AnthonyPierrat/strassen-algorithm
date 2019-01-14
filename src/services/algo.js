@@ -55,7 +55,7 @@ export default class Algo {
             for (let j = 0; j < a.rows; j++) {
                 let currentElementResult = 0;
                 for (let k = 0; k < a.columns; k++) {
-                    currentElementResult += b.matrix[i][k] * a.matrix[j][k];
+                    currentElementResult += a.matrix[i][k] * b.matrix[k][j];
                 }
                 c.matrix[i][j] = currentElementResult;
             }
@@ -177,54 +177,63 @@ export default class Algo {
 
     divideByBlock(a, b) {
 
-        // top left matrix a
-        let a11 = new Matrix(a.matrix.length / 2, a.matrix[0].length / 2, false);
-        a11.matrix = this.split(a, 0, a.matrix.length / 2, 0, a.matrix[0].length / 2);
-        // top right matrix a
-        let a12 = new Matrix(a.matrix.length / 2, a.matrix[0].length / 2, false);
-        a12.matrix = this.split(a, 0, a.matrix.length / 2, a.matrix.length / 2, a.matrix.length);
-        // bottom left matrix a
-        let a21 = new Matrix(a.matrix.length / 2, a.matrix[0].length / 2, false);
-        a21.matrix = this.split(a, a.matrix.length / 2, a.matrix.length, 0, a.matrix[0].length / 2);
-        // bottom right matrix a
-        let a22 = new Matrix(a.matrix.length / 2, a.matrix[0].length / 2, false);
-        a22.matrix = this.split(a, a.matrix.length / 2, a.matrix.length, a.matrix.length / 2, a.matrix.length);
+        const n = a.matrix.length;
 
-        // console.log('top left', a11);
-        // console.log('top right', a12);
-        // console.log('bottom left', a21);
-        // console.log('bottom right', a22);
+        const result = new Matrix(n, n, false);
 
-        // top left matrix b
-        let b11 = new Matrix(b.matrix.length / 2, b.matrix[0].length / 2, false);
-        b11.matrix = this.split(b, 0, b.matrix.length / 2, 0, b.matrix[0].length / 2);
-        // top right matrix b
-        let b12 = new Matrix(b.matrix.length / 2, b.matrix[0].length / 2, false);
-        b12.matrix = this.split(b, 0, b.matrix.length / 2, b.matrix.length / 2, b.matrix.length);
-        // bottom left matrix b
-        let b21 = new Matrix(b.matrix.length / 2, b.matrix[0].length / 2, false);
-        b21.matrix = this.split(b, b.matrix.length / 2, b.matrix.length, 0, b.matrix[0].length / 2);
-        // bottom right matrix b
-        let b22 = new Matrix(b.matrix.length / 2, b.matrix[0].length / 2, false);
-        b22.matrix = this.split(b, b.matrix.length / 2, b.matrix.length, b.matrix.length / 2, b.matrix.length);
+        if (n === 2) {
 
-        // console.log('top left', b11);
-        // console.log('top right', b12);
-        // console.log('bottom left', b21);
-        // console.log('bottom right', b22);
+            return this.multiply(a, b);
 
-        const m1 = this.multiply(this.add(a11, a22), this.add(b11, b22));
-        const m2 = this.multiply(this.add(a21, a22), b11);
-        const m3 = this.multiply(this.substract(b12 - b22), a11);
-        const m4 = this.multiply(this.substract(b21 - b11), a22);
-        const m5 = this.multiply(this.add(a11, a12), b22);
-        const m6 = this.multiply(this.substract(a21, a11), this.add(b11, b12));
-        const m7 = this.multiply(this.substract(a12, a22), this.add(b21, b22));
+        } else {
+            // top left matrix a
+            let a11 = new Matrix(n / 2, n / 2, false);
+            a11.matrix = this.split(a, 0, n / 2, 0, n / 2);
+            // top right matrix a
+            let a12 = new Matrix(n / 2, n / 2, false);
+            a12.matrix = this.split(a, 0, n / 2, n / 2, n);
+            // bottom left matrix a
+            let a21 = new Matrix(n / 2, n / 2, false);
+            a21.matrix = this.split(a, n / 2, n, 0, n / 2);
+            // bottom right matrix a
+            let a22 = new Matrix(n / 2, n / 2, false);
+            a22.matrix = this.split(a, n / 2, n, n / 2, n);
 
-        const c11 = this.substract(this.add(m1, m4), this.substract(m5, m7));
-        const c12 = this.add(m3, m5);
-        const c21 = this.add(m2, m4);
-        const c22 = this.add(this.substract(m1, m2), this.add(m3, m6));
+            // top left matrix b
+            let b11 = new Matrix(n / 2, n / 2, false);
+            b11.matrix = this.split(b, 0, n / 2, 0, n / 2);
+            // top right matrix b
+            let b12 = new Matrix(n / 2, n / 2, false);
+            b12.matrix = this.split(b, 0, n / 2, n / 2, n);
+            // bottom left matrix b
+            let b21 = new Matrix(n / 2, n / 2, false);
+            b21.matrix = this.split(b, n / 2, n, 0, n / 2);
+            // bottom right matrix b
+            let b22 = new Matrix(n / 2, n / 2, false);
+            b22.matrix = this.split(b, n / 2, n, n / 2, n);
 
+            const q1 = this.divideByBlock(this.substract(a11, a12), b22);
+            const q2 = this.divideByBlock(this.substract(a21, a22), b11);
+            const q3 = this.divideByBlock(a22, this.add(b11, b21));
+            const q4 = this.divideByBlock(a11, this.add(b12, b22));
+            const q5 = this.divideByBlock(this.add(a11, a22), this.substract(b22, b11));
+            const q6 = this.divideByBlock(this.add(a11, a21), this.add(b11, b12));
+            const q7 = this.divideByBlock(this.add(a12, a22), this.add(b21, b22));
+
+            // CHANGER ICI
+
+            const c11 = this.add(this.substract(this.add(q1, q4), q5), q7);
+            const c12 = this.substract(q4, q1);
+            const c21 = this.add(q2, q3);
+            const c22 = this.add(this.substract(q1, q2), this.add(q3, q6));
+
+            this.merge(c11, result, 0, 0);
+            this.merge(c12, result, 0, n / 2);
+            this.merge(c21, result, n / 2, 0);
+            this.merge(c22, result, n / 2, n / 2);
+
+        }
+
+        return result;
     }
 } 
