@@ -51,13 +51,12 @@ export default class Algo {
      */
     multiply(a, b) {
         const c = new Matrix(a.columns, a.rows, false);
+        console.log(a, b, c);
         for (let i = 0; i < b.columns; i++) {
             for (let j = 0; j < a.rows; j++) {
-                let currentElementResult = 0;
                 for (let k = 0; k < a.columns; k++) {
-                    currentElementResult += a.matrix[i][k] * b.matrix[k][j];
+                    c.matrix[i][j] += a.matrix[i][k] * b.matrix[k][j];
                 }
-                c.matrix[i][j] = currentElementResult;
             }
         }
         return c;
@@ -220,12 +219,10 @@ export default class Algo {
             const q6 = this.divideByBlock(this.add(a11, a21), this.add(b11, b12));
             const q7 = this.divideByBlock(this.add(a12, a22), this.add(b21, b22));
 
-            // CHANGER ICI
-
-            const c11 = this.add(this.substract(this.add(q1, q4), q5), q7);
+            const c11 = this.substract(this.substract(q1, q3), this.substract(q5, q7));
             const c12 = this.substract(q4, q1);
             const c21 = this.add(q2, q3);
-            const c22 = this.add(this.substract(q1, q2), this.add(q3, q6));
+            const c22 = this.add(this.substract(q2, q4), this.add(q5, q6));
 
             this.merge(c11, result, 0, 0);
             this.merge(c12, result, 0, n / 2);

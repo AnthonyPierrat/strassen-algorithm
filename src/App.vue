@@ -17,19 +17,21 @@ export default {
   },
 
   created: function() {
-    const m = new Matrix(4, 4, true);
-    const s = new Matrix(32, 32, true);
-    const l = new Matrix(32, 32, true);
+    // const m = new Matrix(4, 4, true);
+    const s = new Matrix(4, 4, true);
+    const l = new Matrix(4, 4, true);
+    s.matrix = [[-1, 0, 1, 0], [1, 0, 1, 0], [-1, 0, 1, 0], [1, 0, 1, 0]];
+    l.matrix = [[1, 0, -1, 0], [1, 0, 1, 0], [1, 0, -1, 0], [1, 0, 1, 0]];
     const math = new Algo();
     // console.log(m.matrix, s.matrix);
     // console.log(math.add(m, s));
     // const result2 = math.substract(m, s);
     // math.fillPowerOfTwo(l);
     // math.reshape(l);
-    console.log("matrice a avant block", l.matrix);
-    console.log("matrice b avant block", s.matrix);
-    // math.multiply(l,s);
-    console.log(math.divideByBlock(l, s));
+    console.log("matrice a avant block", s.matrix);
+    console.log("matrice b avant block", l.matrix);
+    console.log("naive", math.multiply(s, l));
+    console.log("strassen", math.divideByBlock(s, l));
   }
 };
 </script>
