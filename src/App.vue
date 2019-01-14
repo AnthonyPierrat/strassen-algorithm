@@ -28,6 +28,7 @@ export default {
     // math.reshape(l);
     console.log("matrice a avant block", l.matrix);
     console.log("matrice b avant block", s.matrix);
+    math.multiply(l,s);
     math.divideByBlock(l, s);
   }
 };

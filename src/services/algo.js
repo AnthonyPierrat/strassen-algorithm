@@ -43,6 +43,27 @@ export default class Algo {
     }
 
     /**
+     * standard matrix multiplying (without Strassen)
+     * @param {Matrix} a 
+     * @param {Matrix} b
+     * @return 
+     *  A matrix object
+     */
+    multiply(a, b) {
+        const c = new Matrix(a.columns, a.rows, false);
+        for (let i = 0; i < b.columns; i++) {
+            for (let j = 0; j < a.rows; j++) {
+                let currentElementResult = 0;
+                for (let k = 0; k < a.columns; k++) {
+                    currentElementResult += b.matrix[i][k]*a.matrix[j][k];
+                }
+                c.matrix[i][j] = currentElementResult;
+            }
+        }
+        return c;
+    }
+
+    /**
      * Check wether the matrix is power of two
      * @param {Matrix} matrix
      * @return
