@@ -17,18 +17,18 @@ export default {
   },
 
   created: function() {
-    // const m = new Matrix(4, 4, true);
+    const m = new Matrix(4, 4, true);
     const s = new Matrix(4, 4, true);
     const l = new Matrix(4, 4, true);
     const math = new Algo();
     // console.log(m.matrix, s.matrix);
-    // const result = math.add(m, s);
+    // console.log(math.add(m, s));
     // const result2 = math.substract(m, s);
     // math.fillPowerOfTwo(l);
     // math.reshape(l);
-    console.log("matrice a avant block", l.matrix);
-    console.log("matrice b avant block", s.matrix);
-    math.multiply(l,s);
+    // console.log("matrice a avant block", l.matrix);
+    // console.log("matrice b avant block", s.matrix);
+    // math.multiply(l,s);
     math.divideByBlock(l, s);
   }
 };
