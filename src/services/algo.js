@@ -160,6 +160,21 @@ export default class Algo {
         return result;
     }
 
+    /**
+     * merge a matrix
+     * @param {Matrix} matrix matrix to merge
+     * @param {Matrix} matrixResult merged matrix
+     * @param {number} start 
+     * @param {number} end 
+     */
+    merge(matrix, matrixResult, start, end) {
+
+        for (let i1 = 0, i2 = start; i1 < matrix.matrix.length; i1++ , i2++)
+            for (let j1 = 0, j2 = end; j1 < matrix.matrix.length; j1++ , j2++) {
+                matrixResult.matrix[i2][j2] = matrix.matrix[i1][j1];
+            }
+    }
+
     divideByBlock(a, b) {
 
         // top left matrix a
@@ -205,6 +220,11 @@ export default class Algo {
         const m5 = this.multiply(this.add(a11, a12), b22);
         const m6 = this.multiply(this.substract(a21, a11), this.add(b11, b12));
         const m7 = this.multiply(this.substract(a12, a22), this.add(b21, b22));
+
+        const c11 = this.substract(this.add(m1, m4), this.substract(m5, m7));
+        const c12 = this.add(m3, m5);
+        const c21 = this.add(m2, m4);
+        const c22 = this.add(this.substract(m1, m2), this.add(m3, m6));
 
     }
 } 
