@@ -51,7 +51,6 @@ export default class Algo {
      */
     multiply(a, b) {
         const c = new Matrix(a.columns, a.rows, false);
-        console.log(a, b, c);
         for (let i = 0; i < b.columns; i++) {
             for (let j = 0; j < a.rows; j++) {
                 for (let k = 0; k < a.columns; k++) {
@@ -60,6 +59,20 @@ export default class Algo {
             }
         }
         return c;
+    }
+
+    /**
+     * multiply a matrix by a coefficient
+     * @param {number} coef the coefficient
+     */
+    matrixByCoef(matrix, coef) {
+        for (let i = 0; i < matrix.columns; i++) {
+            for (let j = 0; j < matrix.rows; j++) {
+                matrix.matrix[i][j] *= coef;
+            }
+        }
+
+        return matrix;
     }
 
     /**
@@ -222,7 +235,7 @@ export default class Algo {
             const c11 = this.substract(this.substract(q1, q3), this.substract(q5, q7));
             const c12 = this.substract(q4, q1);
             const c21 = this.add(q2, q3);
-            const c22 = this.add(this.substract(q2, q4), this.add(q5, q6));
+            const c22 = this.add(this.substract(this.matrixByCoef(q2, -1), q4), this.add(q5, q6));
 
             this.merge(c11, result, 0, 0);
             this.merge(c12, result, 0, n / 2);

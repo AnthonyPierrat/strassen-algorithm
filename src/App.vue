@@ -28,7 +28,8 @@ export default {
     // const result2 = math.substract(m, s);
     // math.fillPowerOfTwo(l);
     // math.reshape(l);
-    console.log("matrice a avant block", s.matrix);
+    // console.log("matrice a avant block", s.matrix);
+    // console.log("coef", math.matrixByCoef(s, -1));
     console.log("matrice b avant block", l.matrix);
     console.log("naive", math.multiply(s, l));
     console.log("strassen", math.divideByBlock(s, l));
