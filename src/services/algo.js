@@ -77,79 +77,41 @@ export default class Algo {
 
     /**
      * Check wether the matrix is power of two
-     * @param {Matrix} matrix
+     * @param {number} n size
      * @return
      *  A boolean 
      */
-    isPowerOfTwo(matrix) {
-        const n = matrix.matrix.length * matrix.matrix[0].length;
+    isPowerOfTwo(n) {
         return Math.log2(n) % 1 === 0;
     }
 
     /**
      * Fill a matrix to a power of two matrix with zeros
-     * Step 1 - check wether the matrix is n*n 
-     * Step 2 - Make it power of two if neccessary
      * @param {Matrix} matrix
-     * @return
-     *  A matrix object
      */
     fillPowerOfTwo(matrix) {
-
-        // first check if it's n*n
-        // otherwise make it same size
-
-        // more columns than rows
-        if (matrix.columns > matrix.rows) {
-            // get number of rows to add
-            const rowsToAdd = matrix.columns - matrix.rows;
-            // add rows
-            matrix.matrix.forEach(array => {
-                for (let i = 0; i < rowsToAdd; i++) array.push(0);
-            })
-            // more rows than columns
-        } else {
-            // get number of columns to add
-            const columnsToAdd = matrix.rows - matrix.columns;
-            // add columns
-            for (let i = 0; i < columnsToAdd; i++) matrix.matrix.push(new Array(matrix.rows).fill(0));
-        }
-
-        // is new computed size power of two
-        if (!this.isPowerOfTwo(matrix)) {
-            // compute new length
-            const n = matrix.matrix.length * matrix.matrix[0].length;
-            // find nearest power of two
-            const nearestPowerOfTwo = Math.ceil(Math.log2(n));
-
-            // reshape to the power of two
-            // get columns to add
-            const columnsToAdd = 2 ^ nearestPowerOfTwo - matrix.matrix.length;
-            // get rows to add
-            const rowsToAdd = 2 ^ nearestPowerOfTwo - matrix.matrix[0].length;
-            // add columns
-            for (let i = 0; i < columnsToAdd; i++) matrix.matrix.push(new Array(nearestPowerOfTwo).fill(0));
-
-            // add rows
-            matrix.matrix.forEach(array => {
-                for (let i = 0; i < rowsToAdd; i++) array.push(0);
-            })
-        }
-        console.log('power', matrix.matrix);
+        // find nearest power of two
+        let nearestPowerOfTwo = Math.pow(2, Math.trunc(Math.log2(matrix.columns) + 1)) - matrix.columns;
+        // compute new size
+        const size = nearestPowerOfTwo + matrix.columns;
+        // fill
+        matrix.matrix.forEach(array => {
+            for (let i = 0; i < nearestPowerOfTwo; i++) array.push(0);
+        })
+        for (let i = 0; i < nearestPowerOfTwo; i++) matrix.matrix.push(new Array(size).fill(0));
     }
 
     /**
      * Reshape a matrix to it's origin columns and rows (remove zeros)
      * @param {Matrix} matrix
-     * @return
-     *  A matrix object
      */
-    reshape(matrix) {
-
-        matrix.matrix.splice(matrix.columns, (matrix.matrix.length - matrix.columns));
+    reshape(matrix, size) {
+        matrix.matrix.splice(size, (matrix.matrix.length - size));
         matrix.matrix.forEach(array => {
-            array.splice(matrix.rows, array.length - matrix.rows);
+            array.splice(size, array.length - size);
         })
+        matrix.columns = size;
+        matrix.rows = size;
     }
 
     /**
@@ -245,5 +207,33 @@ export default class Algo {
         }
 
         return result;
+    }
+
+    /**
+     * Strassen multiplication
+     * @param {Matrix} a Matrix a
+     * @param {Matrix} b Matrix b
+     */
+    strassen(a, b) {
+
+        if (a.columns !== a.rows || b.columns !== b.rows)
+            throw new Error('The matrix is not n*n');
+        if (a.columns !== b.columns)
+            throw new Error('Matrix must have the same size');
+
+        const size = a.columns;
+        let c = new Matrix(size, size);
+
+        if (!this.isPowerOfTwo(size)) {
+            this.fillPowerOfTwo(a);
+            this.fillPowerOfTwo(b);
+            c = this.divideByBlock(a, b);
+            this.reshape(c, size);
+        }
+        else {
+            c = this.divideByBlock(a, b);
+        }
+
+        return c;
     }
 } 
