@@ -155,7 +155,7 @@ export default class Algo {
 
         const result = new Matrix(n, n, false);
 
-        if (n === 2) {
+        if (n <= 2) {
 
             return this.multiply(a, b);
 
@@ -233,7 +233,6 @@ export default class Algo {
         else {
             c = this.divideByBlock(a, b);
         }
-
         return c;
     }
 } 
