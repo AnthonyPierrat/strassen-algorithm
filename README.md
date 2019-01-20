@@ -1,7 +1,7 @@
 # strassen
 
 > strassen algorithm
-
+MT79 UTBM course
 ## Build Setup
 
 ``` bash
