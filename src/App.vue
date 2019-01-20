@@ -3,7 +3,7 @@
     <nav class="navbar has-background-primary" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="https://bulma.io">
-          <h1 class="title has-text-white">Strassenify.js</h1>
+          <h1 class="title has-text-white">MT79 Strassen</h1>
         </a>
       </div>
 
@@ -11,7 +11,7 @@
         <div class="navbar-end">
           <div class="navbar-item">
             <div class="buttons">
-              <a class="button">
+              <a href="https://github.com/AnthonyPierrat/strassen-algorithm" class="button">
                 <span class="icon">
                   <i class="fab fa-github"></i>
                 </span>
@@ -40,55 +40,72 @@
               >
             </div>
             <div class="column is-narrow">
-              <a v-on:click="generate" class="button is-primary is-right">Generate</a>
+              <a v-on:click="generate" class="button is-success is-right">Generate</a>
+              <a
+                v-bind:disabled="!matrixA.matrix && !matrixB.matrix"
+                v-on:click="clear"
+                class="button is-danger is-right"
+              >Clear</a>
             </div>
           </div>
-          <div class="columns is-centered">
+          <div v-if="size <= 12" class="columns is-centered">
             <div class="column is-narrow">
+              <p v-if="matrixA.matrix">A</p>
               <table class="table is-bordered">
                 <tbody>
-                  <tr v-for="row in matrixA.matrix">
-                    <td v-for="column in row">{{row[column]}}</td>
+                  <tr v-for="(row, index) in matrixA.matrix">
+                    <td v-for="column in row">{{column}}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <div class="column is-narrow">
+              <p v-if="matrixB.matrix">B</p>
               <table class="table is-bordered">
                 <tbody>
-                  <tr v-for="row in matrixB.matrix">
-                    <td v-for="column in row">{{row[column]}}</td>
+                  <tr v-for="(row, index) in matrixB.matrix">
+                    <td v-for="column in row">{{column}}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
             <div class="column is-narrow">
+              <p v-if="matrixC.matrix">C</p>
               <table class="table is-bordered">
                 <tbody>
-                  <tr v-for="row in matrixC.matrix">
-                    <td v-for="column in row">{{row[column]}}</td>
+                  <tr v-for="(row, index) in matrixC.matrix">
+                    <td v-for="column in row">{{column}}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
 
-          <div class="column has-text-centered">
-            <div class="field is-grouped is-centered">
-              <div class="control">
-                <a v-on:click="strassen" class="button is-primary is-right">Strassen multiply</a>
-                {{strassenTime}} ms
-              </div>
-              <div class="control">
-                <a v-on:click="naive" class="button is-primary is-left">Standard multiply</a>
-                {{naiveTime}} ms
+          <div class="columns is-centered">
+            <div class="column is-narrow">
+              <div class="field is-grouped is-centered">
+                <div class="control">
+                  <a
+                    v-bind:disabled="!matrixA.matrix && !matrixB.matrix"
+                    v-on:click="strassen"
+                    class="button is-primary is-right"
+                  >Strassen multiply</a>
+                  <p v-if="strassenTime">{{strassenTime}} ms</p>
+                </div>
+                <div class="control">
+                  <a
+                    v-bind:disabled="!matrixA.matrix && !matrixB.matrix"
+                    v-on:click="naive"
+                    class="button is-primary is-left"
+                  >Standard multiply</a>
+                  <p v-if="naiveTime">{{naiveTime}} ms</p>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-    <HelloWorld/>
   </div>
 </template>
 
@@ -109,8 +126,8 @@ export default {
       matrixA: [],
       matrixB: [],
       matrixC: [],
-      strassenTime: 0,
-      naiveTime: 0,
+      strassenTime: null,
+      naiveTime: null,
       resultsStrassen: [],
       resultsNaive: [],
       math: new Algo()
@@ -129,18 +146,22 @@ export default {
       }
     },
 
-    run: function() {
-      // create Matrix A
-      const A = new Matrix(10, 10, true);
-      // create Matrix B
-      const B = new Matrix(10, 10, true);
-      const t0 = performance.now();
-      this.math.strassen(A, B);
-      const t1 = performance.now();
-      const time = Math.trunc(t1 - t0);
-      this.resultsStrassen.push({ size: 10, time: time });
+    clear: function() {
+      // clear Matrix A
+      this.matrixA = [];
+      // clear Matrix B
+      this.matrixB = [];
+      // clear Matrix C
+      this.matrixC = [];
+      // clear time
+      this.naiveTime = null;
+      this.strassenTime = null;
+      // clear size
+      this.size = 1;
+    },
 
-      for (let i = 0; i < 1200; i += 100) {
+    run: function() {
+      for (let i = 1; i <= 2048; i = 2 * i) {
         // create Matrix A
         const A = new Matrix(i, i, true);
         // create Matrix B
@@ -148,10 +169,9 @@ export default {
         const t0 = performance.now();
         this.math.multiply(A, B);
         const t1 = performance.now();
-        const time = Math.trunc(t1 - t0);
+        const time = t1 - t0;
         this.resultsStrassen.push({ size: i, time: time });
       }
-
       localStorage.setItem("naive", JSON.stringify(this.resultsStrassen));
     },
 
