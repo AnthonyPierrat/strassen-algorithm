@@ -13,6 +13,7 @@
   "dependencies": {
     "buefy": "^0.7.1",
     "chart.js": "^2.7.3",
+    "push-dir": "^0.4.1",
     "vue": "^2.5.2"
   },
   "devDependencies": {
