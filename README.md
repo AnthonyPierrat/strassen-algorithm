@@ -2,6 +2,8 @@
 
 > strassen algorithm
 MT79 UTBM course
+
+Matrices with a size higher than 12*12 are not rendered on the web interface.
 ## Build Setup
 
 ``` bash
