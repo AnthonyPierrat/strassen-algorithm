@@ -149,17 +149,27 @@ export default class Algo {
             }
     }
 
+    /**
+     * Divide each matrix to submatrices using strassen formulas
+     * @param {Matrix} a Matrix A
+     * @param {Matrix} b Matrix B
+     */
     divideByBlock(a, b) {
 
+        // get matrix length
         const n = a.matrix.length;
 
+        // create matrix c with zeros
         const result = new Matrix(n, n, false);
 
+        // if matrix is below 2 then use standard multiplication
         if (n <= 2) {
 
             return this.multiply(a, b);
 
+            // recursive
         } else {
+
             // top left matrix a
             let a11 = new Matrix(n / 2, n / 2, false);
             a11.matrix = this.split(a, 0, n / 2, 0, n / 2);
@@ -186,6 +196,7 @@ export default class Algo {
             let b22 = new Matrix(n / 2, n / 2, false);
             b22.matrix = this.split(b, n / 2, n, n / 2, n);
 
+            // strassen formulas with recursive call
             const q1 = this.divideByBlock(this.substract(a11, a12), b22);
             const q2 = this.divideByBlock(this.substract(a21, a22), b11);
             const q3 = this.divideByBlock(a22, this.add(b11, b21));
@@ -194,11 +205,13 @@ export default class Algo {
             const q6 = this.divideByBlock(this.add(a11, a21), this.add(b11, b12));
             const q7 = this.divideByBlock(this.add(a12, a22), this.add(b21, b22));
 
+            // matrix c construction with strassen formulas
             const c11 = this.substract(this.substract(q1, q3), this.substract(q5, q7));
             const c12 = this.substract(q4, q1);
             const c21 = this.add(q2, q3);
             const c22 = this.add(this.substract(this.matrixByCoef(q2, -1), q4), this.add(q5, q6));
 
+            // matrix reconstruction
             this.merge(c11, result, 0, 0);
             this.merge(c12, result, 0, n / 2);
             this.merge(c21, result, n / 2, 0);
@@ -221,13 +234,18 @@ export default class Algo {
         if (a.columns !== b.columns)
             throw new Error('Matrix must have the same size');
 
+        // get size & create matrix c
         const size = a.columns;
         let c = new Matrix(size, size);
 
+        // if matrix is not power of two then fill it with zeros with the nearest power of two
+        // else result calculation
         if (!this.isPowerOfTwo(size)) {
             this.fillPowerOfTwo(a);
             this.fillPowerOfTwo(b);
+            // matrix result calculation using rescursive call
             c = this.divideByBlock(a, b);
+            // reshape matrix to it's orignal size (removing zeros)
             this.reshape(c, size);
         }
         else {
